@@ -59,7 +59,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="font-bold text-xl text-[#FF6B35]" onClick={(e) => scrollToSection(e, "/")}>
-            One Child One Tree
+            One Child One Tree Africa
           </Link>
 
           <nav className="hidden md:flex gap-6">

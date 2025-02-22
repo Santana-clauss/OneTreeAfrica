@@ -14,21 +14,21 @@ const activities = [
       "We organize tree planting events in schools and communities, engaging students in hands-on environmental action.",
     icon: TreePine,
     color: "bg-emerald-500",
-    image: "/placeholder.svg?height=400&width=600&text=Tree+Planting",
+    image: "/images/tree-planting.jpg", // Updated image path
   },
   {
     title: "Environmental Education",
     description: "Our curriculum teaches students about climate change, conservation, and sustainable practices.",
     icon: Book,
     color: "bg-blue-500",
-    image: "/placeholder.svg?height=400&width=600&text=Environmental+Education",
+    image: "/mixxed.jpg", // Updated image path
   },
   {
     title: "Community Engagement",
     description: "We work with local communities to create sustainable environmental initiatives and raise awareness.",
     icon: Users,
     color: "bg-purple-500",
-    image: "/placeholder.svg?height=400&width=600&text=Community+Engagement",
+    image: "/images/community-engagement.jpg", // Updated image path
   },
   {
     title: "Eco-Clubs",
@@ -36,7 +36,7 @@ const activities = [
       "We establish and support eco-clubs in schools to foster ongoing environmental stewardship among students.",
     icon: Leaf,
     color: "bg-yellow-500",
-    image: "/placeholder.svg?height=400&width=600&text=Eco-Clubs",
+    image: "/whatwedo.jpg", // Updated image path
   },
 ]
 

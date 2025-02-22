@@ -12,7 +12,7 @@ const projects = [
     name: "St Joseph Girls Chepterit",
     trees: 2400,
     images: [
-      "/chepterit.jpg?height=200&width=400&text=St+Joseph+Girls+1",
+      "/chepterit5.jpg?height=200&width=400&text=St+Joseph+Girls+1",
       "/chepterit2.jpg?height=200&width=400&text=St+Joseph+Girls+2",
       "/chepterit6.jpg?height=200&width=400&text=St+Joseph+Girls+3",
     ],
