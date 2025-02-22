@@ -14,7 +14,7 @@ const activities = [
       "We organize tree planting events in schools and communities, engaging students in hands-on environmental action.",
     icon: TreePine,
     color: "bg-emerald-500",
-    image: "/images/tree-planting.jpg", // Updated image path
+    image: "/treeplanting.jpg", // Updated image path
   },
   {
     title: "Environmental Education",
