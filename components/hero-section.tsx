@@ -58,7 +58,7 @@ export function HeroSection() {
             asChild
             size="lg"
             variant="outline"
-            className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
+            className="bg-[#198754] text-white hover:bg-[#198754]/90 px-8 py-3 text-lg"
           >
             <Link href="#contact">Get Involved</Link>
           </Button>

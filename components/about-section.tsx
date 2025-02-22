@@ -100,7 +100,7 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-orange-500 via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-orange-400 via-transparent to-transparent z-10" />
             <Image
               src="/paulboit.jpg"
               alt="Children planting trees"
@@ -133,7 +133,7 @@ export function AboutSection() {
           className="bg-white rounded-3xl shadow-xl overflow-hidden"
         >
           <div className="grid md:grid-cols-3 lg:grid-cols-4">
-            <div className="bg-teal-500 text-white p-8 md:col-span-1 lg:col-span-1">
+            <div className="bg-[#198754] text-white p-8 md:col-span-1 lg:col-span-1">
               <h3 className="text-3xl font-bold mb-6">Our Core Values</h3>
               <ul className="space-y-4">
                 {features.map((feature, index) => (
