@@ -5,11 +5,11 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-white font-bold text-lg mb-4">One Child One Tree</h3>
-            <p className="text-sm">
-              Creating a platform for the next generation to take climate action through education, conservation, and
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+        <h3 className="text-white font-bold text-lg mb-4">One Child One Tree</h3>
+        <p className="text-sm">
+          Creating a platform for the next generation to take climate action through education, conservation,
               tree planting.
             </p>
           </div>

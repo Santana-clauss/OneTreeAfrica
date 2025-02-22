@@ -7,14 +7,37 @@ import { motion } from "framer-motion"
 
 export function HeroSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      <Image
-        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/free-nonprofit-website-template.jpg-N67iAh2f1Uk22wXIZkRIAeNXgv8xBW.jpeg"
-        alt="Children planting trees"
-        fill
-        className="object-cover brightness-50"
-        priority
-      />
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-orange-500">
+      <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-2">
+        <Image
+          src="/chepteritline.jpg"
+          alt="Children in green uniforms planting trees"
+          fill
+          className="object-cover"
+          priority
+        />
+        <Image
+          src="/paulboi.jpg"
+          alt="Children in maroon uniforms planting trees"
+          fill
+          className="object-cover"
+          priority
+        />
+        <Image
+          src="/mo.jpg"
+          alt="Children in grey uniforms planting trees"
+          fill
+          className="object-cover"
+          priority
+        />
+        <Image
+          src="/mixed.jpg"
+          alt="Children planting trees"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -100,13 +100,13 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl"
           >
+            <div className="absolute inset-0 bg-gradient-to-b from-orange-500 via-transparent to-transparent z-10" />
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/free-nonprofit-website-template.jpg-N67iAh2f1Uk22wXIZkRIAeNXgv8xBW.jpeg"
+              src="/paulboit.jpg"
               alt="Children planting trees"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           </motion.div>
         </div>
 
