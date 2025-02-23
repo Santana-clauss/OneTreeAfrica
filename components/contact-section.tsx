@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 
 export function ContactSection() {
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-20 bg-gradient-to-b from-green-100 to-green-200">
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

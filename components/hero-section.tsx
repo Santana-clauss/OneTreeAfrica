@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 
 export function HeroSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-orange-500">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-2">
         <Image
           src="/chepteritline.jpg"

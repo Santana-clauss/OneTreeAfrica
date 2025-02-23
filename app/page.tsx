@@ -6,6 +6,7 @@ import { TeamSection } from "@/components/team-section"
 import { NewsSection } from "@/components/news-section"
 import { PartnersSection } from "@/components/partners-section"
 import { ContactSection } from "@/components/contact-section"
+import { DonationSection } from "@/components/ui/donate-section"
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <ProjectsSection />
       <TeamSection />
       <NewsSection />
+      <DonationSection />
       <PartnersSection />
       <ContactSection />
     </div>

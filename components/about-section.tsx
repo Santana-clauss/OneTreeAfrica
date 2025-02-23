@@ -72,7 +72,7 @@ export function AboutSection() {
   const [activeFeature, setActiveFeature] = useState(0)
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section id="about" className="py-20 bg-gradient-to-b from-green-50 to-green-100">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
           <motion.div

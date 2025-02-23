@@ -250,7 +250,7 @@ export function ProjectsSection() {
   }
 
   return (
-    <section id="projects" className="py-20 bg-gray-50">
+    <section id="projects" className="py-20 bg-gradient-to-b from-green-50 to-green-100">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <motion.h2
