@@ -55,9 +55,9 @@ export async function sendContactEmail(formData: FormData) {
 
   try {
     await transporter.sendMail(mailOptions);
-    return { success: true, message: "Email sent successfully!" };
+    return { success: true, message: "Message sent successfully!" }; // Ensure success message is returned
   } catch (error) {
-    return { success: false, message: "Failed to send email.", error };
+    return { success: false, message: "Failed to send message.", error };
   }
 }
 

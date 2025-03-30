@@ -30,11 +30,11 @@ export function ContactSection() {
       if (result.success) {
         toast({
           title: "Message Sent",
-          description: result.message,
+          description: "Your message has been sent successfully!",
         })
         // Reset the form
         const form = document.getElementById("contactForm") as HTMLFormElement
-        form.reset()
+        if (form) form.reset()
       } else {
         toast({
           title: "Error",
@@ -74,11 +74,11 @@ export function ContactSection() {
       if (result.success) {
         toast({
           title: "Donation Received",
-          description: result.message,
+          description: "Thank you for your generous donation!",
         })
         // Reset the form
         const form = document.getElementById("donationForm") as HTMLFormElement
-        form.reset()
+        if (form) form.reset()
         setDonationAmount("50")
       } else {
         toast({

@@ -48,18 +48,18 @@ const projects = [
     name: "World Environmental Day - Landson Foundation",
     trees: 400,
     images: [
-      "/placeholder.svg?height=200&width=400&text=Landson+1",
-      "/placeholder.svg?height=200&width=400&text=Landson+2",
-      "/placeholder.svg?height=200&width=400&text=Landson+3",
+      "/earthday/Erday.jpg?height=200&width=400&text=Landson+1",
+      "/earthday/Erday1.jpg?height=200&width=400&text=Landson+2",
+      "/earthday/erd5.jpg?height=200&width=400&text=Landson+3",
     ],
   },
   {
     name: "Nelson Mandela Day - Moi University Primary School",
     trees: 800,
     images: [
-      "/placeholder.svg?height=200&width=400&text=Moi+University+1",
-      "/placeholder.svg?height=200&width=400&text=Moi+University+2",
-      "/placeholder.svg?height=200&width=400&text=Moi+University+3",
+      "/moiuni/moiuni.jpg?height=200&width=400&text=Moi+University+1",
+      "/moiuni/moiuni1.jpg?height=200&width=400&text=Moi+University+2",
+      "/moiuni/moiuni3.jpg?height=200&width=400&text=Moi+University+3",
     ],
   },
   {
