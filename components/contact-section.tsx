@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2 } from "lucide-react"
 
+const COMPANY_EMAIL = "santanajepchumba@gmail.com"
+
 export function ContactSection() {
   const { toast } = useToast()
   const [isContactSubmitting, setIsContactSubmitting] = useState(false)
@@ -22,6 +24,7 @@ export function ContactSection() {
     setFormErrors({})
 
     try {
+      formData.append("recipient", COMPANY_EMAIL) // Add the company's email address
       const result = await sendContactEmail(formData)
 
       if (result.success) {
@@ -40,9 +43,9 @@ export function ContactSection() {
         })
 
         // Handle validation errors
-        if (result.errors) {
+        if (result.error && Array.isArray(result.error)) {
           const errors: Record<string, string> = {}
-          result.errors.forEach((error) => {
+          result.error.forEach((error: { path: string[]; message: string }) => {
             const field = error.path[0] as string
             errors[field] = error.message
           })
@@ -65,6 +68,7 @@ export function ContactSection() {
     setFormErrors({})
 
     try {
+      formData.append("recipient", COMPANY_EMAIL) // Add the company's email address
       const result = await processDonation(formData)
 
       if (result.success) {

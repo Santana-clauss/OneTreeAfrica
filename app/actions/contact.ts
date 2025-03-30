@@ -32,59 +32,35 @@ function createTransporter() {
 }
 
 export async function sendContactEmail(formData: FormData) {
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const message = formData.get("message");
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: false, 
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.SMTP_USER,
+    to: "santanajepchumba@gmail.com",
+    subject: "New Contact Form Submission",
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+  };
+
   try {
-    // Extract and validate form data
-    const name = formData.get("name") as string
-    const email = formData.get("email") as string
-    const message = formData.get("message") as string
-
-    const validatedData = contactFormSchema.parse({
-      name,
-      email,
-      message,
-    })
-
-    // Create email transporter
-    const transporter = createTransporter()
-
-    // Email content
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_TO,
-      subject: `Contact Form: Message from ${validatedData.name}`,
-      text: `
-        Name: ${validatedData.name}
-        Email: ${validatedData.email}
-        
-        Message:
-        ${validatedData.message}
-      `,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${validatedData.name}</p>
-        <p><strong>Email:</strong> ${validatedData.email}</p>
-        <h3>Message:</h3>
-        <p>${validatedData.message.replace(/\n/g, "<br>")}</p>
-      `,
-    }
-
-    // Send email
-    await transporter.sendMail(mailOptions)
-
-    return { success: true, message: "Your message has been sent successfully!" }
+    await transporter.sendMail(mailOptions);
+    return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    console.error("Contact form error:", error)
-    if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        message: "Validation error",
-        errors: error.errors.map((e) => ({ path: e.path.join("."), message: e.message })),
-      }
-    }
-
-    return { success: false, message: "Failed to send message. Please try again later." }
+    return { success: false, message: "Failed to send email.", error };
   }
 }
+
 
 export async function processDonation(formData: FormData) {
   try {
