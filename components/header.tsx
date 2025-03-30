@@ -18,7 +18,7 @@ const navItems = [
   { name: "News", href: "#news" },
   { name: "Gallery", href: "/gallery" },
   { name: "Partners", href: "#partners" },
-  { name: "Contact", href: "#contact" },
+ // { name: "Contact", href: "#contact" },
 ]
 
 export function Header() {
