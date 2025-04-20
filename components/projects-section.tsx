@@ -18,6 +18,15 @@ const projects = [
     ],
   },
   {
+    name: "World Environmental Day - Landson Foundation",
+    trees: 400,
+    images: [
+      "/earthday/Erday.jpg?height=200&width=400&text=Landson+1",
+      "/earthday/Erday1.jpg?height=200&width=400&text=Landson+2",
+      "/earthday/erd5.jpg?height=200&width=400&text=Landson+3",
+    ],
+  },
+  {
     name: "ACK Ziwa High School",
     trees: 500,
     images: [
@@ -44,15 +53,7 @@ const projects = [
       "/placeholder.svg?height=200&width=400&text=Kapkong+3",
     ],
   },
-  {
-    name: "World Environmental Day - Landson Foundation",
-    trees: 400,
-    images: [
-      "/earthday/Erday.jpg?height=200&width=400&text=Landson+1",
-      "/earthday/Erday1.jpg?height=200&width=400&text=Landson+2",
-      "/earthday/erd5.jpg?height=200&width=400&text=Landson+3",
-    ],
-  },
+  
   {
     name: "Nelson Mandela Day - Moi University Primary School",
     trees: 800,
