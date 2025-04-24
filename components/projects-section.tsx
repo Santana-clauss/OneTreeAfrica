@@ -26,6 +26,16 @@ const projects = [
       "/earthday/erd5.jpg?height=200&width=400&text=Landson+3",
     ],
   },
+   {
+    name:"Paul Boit Boys High School",
+    trees: 1630,
+    images: [
+      "/paulboit/paul4.jpg?height=200&width=400&text=Paul+Boit+1",
+      "/paulboit/paul3.jpg?height=200&width=400&text=Paul+Boit+2",
+      "/paulboit/paul1.jpg?height=200&width=400&text=Paul+Boit+3",
+      
+    ],
+  },
   {
     name: "ACK Ziwa High School",
     trees: 500,
@@ -35,6 +45,7 @@ const projects = [
       "/placeholder.svg?height=200&width=400&text=ACK+Ziwa+3",
     ],
   },
+  
   {
     name: "Moi Girls High School",
     trees: 1200,
