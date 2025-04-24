@@ -1,91 +1,83 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getProjects } from "./actions/projects"
-import { getNews } from "./actions/news"
+"use client"
 
-export default async function AdminDashboard() {
-  const { projects = [] } = (await getProjects()) as any
-  const { news = [] } = (await getNews()) as any
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Loader2, Lock } from "lucide-react"
+import { signIn } from "@/app/actions/auth"
 
-  const stats = [
-    {
-      title: "Total Projects",
-      value: projects.length,
-      description: "Projects managed through the platform",
-    },
-    {
-      title: "Total Trees",
-      value: projects.reduce((acc: number, project: any) => acc + project.trees, 0),
-      description: "Trees planted across all projects",
-    },
-    {
-      title: "News Articles",
-      value: news.length,
-      description: "Published news and blog posts",
-    },
-  ]
+export default function AdminPage() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const router = useRouter()
+
+  async function handleLogin(formData: FormData) {
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const username = formData.get("username") as string
+      const password = formData.get("password") as string
+
+      if (!username || !password) {
+        setError("Username and password are required")
+        return
+      }
+
+      const result = await signIn(username, password)
+
+      if (result.success) {
+        router.push("/admin/dashboard")
+      } else {
+        setError(result.message || "Invalid credentials")
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-green-100 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-2xl font-bold">Admin Dashboard</CardTitle>
+          <CardDescription>Enter your credentials to access the admin panel</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={handleLogin} className="space-y-4">
+            {error && <div className="p-3 text-sm bg-red-50 text-red-500 rounded-md">{error}</div>}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">{stat.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{stat.value}</div>
-              <p className="text-sm text-gray-500 mt-1">{stat.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Projects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {projects.slice(0, 5).map((project: any) => (
-                <div key={project.id} className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
-                    <span className="text-xl font-bold">{project.id}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{project.name}</h3>
-                    <p className="text-sm text-gray-500">{project.trees} trees</p>
-                  </div>
-                </div>
-              ))}
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" name="username" type="text" required />
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent News</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {news.slice(0, 5).map((item: any) => (
-                <div key={item.id} className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
-                    <span className="text-xl font-bold">{item.id}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{item.title}</h3>
-                    <p className="text-sm text-gray-500 truncate">{item.excerpt}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" name="password" type="password" required />
             </div>
-          </CardContent>
-        </Card>
-      </div>
+
+            <Button type="submit" className="w-full bg-[#198754] hover:bg-[#198754]/90" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <Lock className="mr-2 h-4 w-4" />
+                  Sign In
+                </>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
-

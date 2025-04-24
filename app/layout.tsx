@@ -9,8 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "One Child One Tree Africa",
-  description: "Creating a platform for the next generation to take climate action",
-    generator: 'v0.dev'
+
 }
 
 export default function RootLayout({
