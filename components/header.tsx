@@ -14,9 +14,8 @@ const navItems = [
   { name: "About", href: "#about" },
   { name: "What We Do", href: "#what-we-do" },
   { name: "Projects", href: "#projects" },
-  // { name: "Team", href: "#team" },
   { name: "News", href: "#news" },
-  { name: "Gallery", href: "/gallery" },
+  { name: "Gallery", href: "/gallery" }, // Updated to navigate to the gallery page
   { name: "Partners", href: "#partners" },
  // { name: "Contact", href: "#contact" },
 ]
@@ -33,11 +32,6 @@ export function Header() {
 
     if (href === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" })
-      return
-    }
-
-    if (href === "/gallery") {
-      window.location.href = href
       return
     }
 
@@ -68,7 +62,9 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className="text-sm font-medium hover:text-[#FF6B35] transition-colors duration-200"
-                onClick={(e) => scrollToSection(e, item.href)}
+                onClick={(e) => {
+                  if (item.href.startsWith("#")) scrollToSection(e, item.href)
+                }}
               >
                 {item.name}
               </Link>
@@ -97,7 +93,7 @@ export function Header() {
                       href={item.href}
                       className="text-sm font-medium hover:text-[#FF6B35] transition-colors duration-200"
                       onClick={(e) => {
-                        scrollToSection(e, item.href)
+                        if (item.href.startsWith("#")) scrollToSection(e, item.href)
                         const closeButton = document.querySelector(
                           'button[aria-label="Close"]',
                         ) as HTMLButtonElement | null
