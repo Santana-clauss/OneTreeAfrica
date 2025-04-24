@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
@@ -15,12 +15,14 @@ const navItems = [
   { name: "What We Do", href: "#what-we-do" },
   { name: "Projects", href: "#projects" },
   { name: "News", href: "#news" },
-  { name: "Gallery", href: "/gallery" }, // Ensure it navigates to the gallery page
+  { name: "Gallery", href: "/gallery" },
   { name: "Partners", href: "#partners" },
+  { name: "Contact", href: "#contact" },
 ]
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
@@ -30,7 +32,13 @@ export function Header() {
     e.preventDefault()
 
     if (href === "/") {
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      window.location.href = "/"
+      return
+    }
+
+    if (pathname !== "/") {
+      // Navigate to the home page and scroll to the section
+      window.location.href = `/${href}`
       return
     }
 
