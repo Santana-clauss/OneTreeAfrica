@@ -52,7 +52,7 @@ export function HeroSection() {
         </p>
         <div className="flex gap-4 justify-center">
           <Button asChild size="lg" className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white px-8 py-3 text-lg">
-            <Link href="#gallery">View Gallery</Link>
+            <Link href="/gallery">View Gallery</Link>
           </Button>
           <Button
             asChild
