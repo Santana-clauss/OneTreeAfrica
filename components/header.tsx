@@ -15,9 +15,8 @@ const navItems = [
   { name: "What We Do", href: "#what-we-do" },
   { name: "Projects", href: "#projects" },
   { name: "News", href: "#news" },
-  { name: "Gallery", href: "/gallery" }, // Updated to navigate to the gallery page
+  { name: "Gallery", href: "/gallery" }, // Ensure it navigates to the gallery page
   { name: "Partners", href: "#partners" },
- // { name: "Contact", href: "#contact" },
 ]
 
 export function Header() {
