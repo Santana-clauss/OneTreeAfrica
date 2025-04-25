@@ -56,16 +56,6 @@ const projects = [
     ],
   },
   {
-    name: "Kapkong High School",
-    trees: 1600,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Kapkong+1",
-      "/placeholder.svg?height=200&width=400&text=Kapkong+2",
-      "/placeholder.svg?height=200&width=400&text=Kapkong+3",
-    ],
-  },
-  
-  {
     name: "Nelson Mandela Day - Moi University Primary School",
     trees: 800,
     images: [

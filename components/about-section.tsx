@@ -6,9 +6,9 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 
 const stats = [
-  { number: "19,000+", label: "Trees Planted" },
-  { number: "50+", label: "Schools Engaged" },
-  { number: "10,000+", label: "Students Involved" },
+  { number: "25,000+", label: "Trees Planted" },
+  { number: "30+", label: "Schools Engaged" },
+  { number: "25,000+", label: "Students Involved" },
   { number: "5+", label: "Years of Impact" },
 ]
 
