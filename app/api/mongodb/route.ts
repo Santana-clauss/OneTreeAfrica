@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { connectToDatabase, Project, News, Gallery } from "@/lib/mongodb"
 
+// Update the GET function to properly format ObjectIds
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -27,7 +28,10 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Invalid collection" }, { status: 400 })
     }
 
-    return NextResponse.json({ success: true, data })
+    // Convert MongoDB documents to plain objects and handle ObjectIds
+    const serializedData = JSON.parse(JSON.stringify(data))
+
+    return NextResponse.json({ success: true, data: serializedData })
   } catch (error) {
     console.error("API error:", error)
     return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 })

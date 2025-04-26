@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { checkAuth } from "./auth"
 import { connectToDatabase, Project, News, Gallery } from "@/lib/mongodb"
+import { revalidatePages } from "@/lib/actions/revalidate"
 
 // Helper function to simulate image upload and return a placeholder URL
 async function mockImageUpload(file: File, category: string) {
@@ -69,6 +70,8 @@ export async function uploadProjectImage(formData: FormData) {
     project.updatedAt = new Date()
     await project.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true, imageUrl }
   } catch (error) {
@@ -99,6 +102,8 @@ export async function deleteProjectImage(projectId: string, imageIndex: number) 
     project.images.splice(imageIndex, 1)
     project.updatedAt = new Date()
     await project.save()
+
+    await revalidatePages()
 
     revalidatePath("/admin/dashboard")
     return { success: true }
@@ -136,6 +141,8 @@ export async function updateProject(formData: FormData) {
     project.updatedAt = new Date()
     await project.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true }
   } catch (error) {
@@ -170,7 +177,9 @@ export async function addProject(formData: FormData) {
 
     await newProject.save()
 
-    revalidatePath("/admin/dashboard")
+    // Revalidate all pages that might display this data
+    await revalidatePages()
+
     return { success: true }
   } catch (error) {
     console.error("Error adding project:", error)
@@ -191,6 +200,8 @@ export async function deleteProject(projectId: string) {
     if (!result) {
       return { success: false, message: "Project not found" }
     }
+
+    await revalidatePages()
 
     revalidatePath("/admin/dashboard")
     return { success: true }
@@ -252,6 +263,8 @@ export async function addNewsItem(formData: FormData) {
 
     await newItem.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true, imageUrl }
   } catch (error) {
@@ -300,6 +313,8 @@ export async function updateNewsItem(formData: FormData) {
 
     await newsItem.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true }
   } catch (error) {
@@ -321,6 +336,8 @@ export async function deleteNewsItem(newsId: string) {
     if (!result) {
       return { success: false, message: "News item not found" }
     }
+
+    await revalidatePages()
 
     revalidatePath("/admin/dashboard")
     return { success: true }
@@ -377,6 +394,8 @@ export async function uploadGalleryImage(formData: FormData) {
 
     await newImage.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true, imageUrl }
   } catch (error) {
@@ -420,6 +439,8 @@ export async function updateGalleryImage(formData: FormData) {
 
     await galleryImage.save()
 
+    await revalidatePages()
+
     revalidatePath("/admin/dashboard")
     return { success: true }
   } catch (error) {
@@ -441,6 +462,8 @@ export async function deleteGalleryImage(imageId: string) {
     if (!result) {
       return { success: false, message: "Gallery image not found" }
     }
+
+    await revalidatePages()
 
     revalidatePath("/admin/dashboard")
     return { success: true }

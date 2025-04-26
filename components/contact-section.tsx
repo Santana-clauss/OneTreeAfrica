@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { sendContactEmail } from "@/app/actions/contact"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
+import { ZodIssue } from "zod"
 
 const COMPANY_EMAIL = "santanajepchumba@gmail.com"
 
@@ -40,8 +41,8 @@ export function ContactSection() {
 
         if (result.error && Array.isArray(result.error)) {
           const errors: Record<string, string> = {}
-          result.error.forEach((error: { path: string[]; message: string }) => {
-            const field = error.path[0] as string
+          result.error.forEach((error: ZodIssue) => {
+            const field = String(error.path[0])
             errors[field] = error.message
           })
           setFormErrors(errors)

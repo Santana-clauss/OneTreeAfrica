@@ -20,6 +20,7 @@ import {
   Loader2,
   Edit,
   AlertTriangle,
+  Database,
 } from "lucide-react"
 import { checkAuth, signOut } from "@/app/actions/auth"
 import {
@@ -39,6 +40,7 @@ import {
   updateNewsItem,
   updateGalleryImage,
 } from "@/app/actions/admin"
+import { migrateStaticData } from "@/lib/actions/migrate-static-data"
 import Image from "next/image"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -61,6 +63,7 @@ export default function AdminDashboard() {
   const [isAddingGallery, setIsAddingGallery] = useState(false)
   const [isAddingProject, setIsAddingProject] = useState(false)
   const [isSeeding, setIsSeeding] = useState(false)
+  const [isMigrating, setIsMigrating] = useState(false)
   const [selectedNewsItem, setSelectedNewsItem] = useState<any | null>(null)
   const [selectedGalleryImage, setSelectedGalleryImage] = useState<any | null>(null)
   const [isUpdatingNews, setIsUpdatingNews] = useState(false)
@@ -145,6 +148,45 @@ export default function AdminDashboard() {
       })
     } finally {
       setIsSeeding(false)
+    }
+  }
+
+  async function handleMigrateStaticData() {
+    setIsMigrating(true)
+    try {
+      const result = await migrateStaticData()
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: `Static data migrated successfully. Added: ${result.results.projects.added} projects, ${result.results.news.added} news items, ${result.results.gallery.added} gallery images.`,
+        })
+
+        // Refresh data
+        const [projectsData, newsData, galleryData] = await Promise.all([
+          getProjects(),
+          getNewsItems(),
+          getGalleryImages(),
+        ])
+
+        setProjects(projectsData)
+        setNewsItems(newsData)
+        setGalleryImages(galleryData)
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Failed to migrate static data",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setIsMigrating(false)
     }
   }
 
@@ -607,6 +649,19 @@ export default function AdminDashboard() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
           <div className="flex gap-2">
+            <Button variant="outline" onClick={handleMigrateStaticData} disabled={isMigrating}>
+              {isMigrating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Migrating...
+                </>
+              ) : (
+                <>
+                  <Database className="mr-2 h-4 w-4" />
+                  Migrate Static Data
+                </>
+              )}
+            </Button>
             <Button variant="outline" onClick={handleSeedData} disabled={isSeeding}>
               {isSeeding ? (
                 <>
