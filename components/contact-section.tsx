@@ -59,13 +59,13 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-10 bg-gradient-to-b from-green-50 to-green-100">
+    <section id="contact" className="py-8 bg-gradient-to-b from-green-50 to-green-100">
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-bold mb-6 text-center text-gray-800"
+          className="text-2xl md:text-3xl font-bold mb-4 text-center text-gray-800"
         >
           Get in Touch
         </motion.h2>
@@ -73,7 +73,7 @@ export function ContactSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center text-gray-600 mb-8 max-w-md mx-auto"
+          className="text-center text-gray-600 mb-6 max-w-lg mx-auto text-sm"
         >
           We'd love to hear from you! Fill out the form below, and we'll get back to you as soon as possible.
         </motion.p>
@@ -81,7 +81,7 @@ export function ContactSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+          className="max-w-lg mx-auto bg-white p-4 rounded-lg shadow-md"
         >
           <form id="contactForm" action={handleContactSubmit} className="space-y-4">
             <div>
@@ -118,7 +118,7 @@ export function ContactSection() {
 
             <Button
               type="submit"
-              className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white py-3 rounded-lg"
+              className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white py-2 rounded-md text-sm"
               disabled={isContactSubmitting}
             >
               {isContactSubmitting ? (

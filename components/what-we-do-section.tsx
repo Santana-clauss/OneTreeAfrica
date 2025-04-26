@@ -11,7 +11,7 @@ const activities = [
   {
     title: "Tree Planting",
     description:
-      "We organize tree planting events in schools and communities, engaging students in hands-on environmental action.",
+      "As away of taking climate action, we organize tree planting events in schools engaging students in hands-on environmental action.",
     icon: TreePine,
     color: "bg-emerald-500",
     image: "/treeplanting.jpg", // Updated image path
