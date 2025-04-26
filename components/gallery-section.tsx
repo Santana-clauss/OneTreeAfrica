@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, X, Home } from "lucide-react"
@@ -9,72 +9,25 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
-const galleryImages = [
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Students+Planting+1",
-    alt: "Students planting trees at local school",
-    caption: "Students from St. Joseph Girls planting trees during our annual event",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Community+Project+1",
-    alt: "Community members participating in tree planting",
-    caption: "Local community members joining our reforestation efforts",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Environmental+Education+1",
-    alt: "Environmental education session",
-    caption: "Our team conducting an environmental education session at Moi Girls High School",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Tree+Nursery+1",
-    alt: "Tree nursery managed by women",
-    caption: "Women tending to our tree nursery, growing seedlings for future planting events",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Students+Planting+2",
-    alt: "Students planting trees in rural area",
-    caption: "Students from Kapkong High School participating in rural reforestation",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Eco+Club+Meeting",
-    alt: "Eco-club meeting at school",
-    caption: "An eco-club meeting at ACK Ziwa High School, discussing upcoming projects",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Tree+Planting+Event+1",
-    alt: "Large tree planting event",
-    caption: "Our annual tree planting event with over 500 participants from local schools",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Environmental+Workshop",
-    alt: "Environmental workshop",
-    caption: "Environmental education workshop for teachers and community leaders",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Seedling+Distribution",
-    alt: "Seedling distribution",
-    caption: "Distribution of tree seedlings to local schools for their planting programs",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Community+Engagement",
-    alt: "Community engagement session",
-    caption: "Community engagement session on the importance of forest conservation",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=School+Visit",
-    alt: "School visit",
-    caption: "Our team visiting Eldoret National Polytechnic to discuss future collaborations",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Award+Ceremony",
-    alt: "Award ceremony",
-    caption: "Recognition ceremony for schools that have planted the most trees this year",
-  },
-]
+interface GalleryImage {
+  id: number
+  src: string
+  alt: string
+  caption: string
+}
 
 export default function GalleryPage() {
   const [currentImage, setCurrentImage] = useState<number | null>(null)
-  const [filter, setFilter] = useState("all")
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
+
+  useEffect(() => {
+    async function fetchGalleryImages() {
+      const response = await fetch("/api/gallery")
+      const data = await response.json()
+      setGalleryImages(data.images)
+    }
+    fetchGalleryImages()
+  }, [])
 
   const openImage = (index: number) => setCurrentImage(index)
   const closeImage = () => setCurrentImage(null)
@@ -111,7 +64,7 @@ export default function GalleryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {galleryImages.map((image, index) => (
                 <motion.div
-                  key={index}
+                  key={image.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
