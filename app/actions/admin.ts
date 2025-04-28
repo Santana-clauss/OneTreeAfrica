@@ -7,21 +7,11 @@ import { revalidatePages } from "@/lib/actions/revalidate"
 
 // Helper function to simulate image upload and return a placeholder URL
 async function mockImageUpload(file: File, category: string) {
-  // In a real implementation, you would upload to Vercel Blob or another storage service
-  // For now, we'll generate a placeholder URL based on the file name
+  // Use the actual file name without the uploads prefix
   const fileName = file.name.replace(/\s+/g, "-").toLowerCase()
-  const fileType = fileName.split(".").pop() || "jpg"
-  const timestamp = Date.now()
-  const width = category === "gallery" ? 800 : 400
-  const height = category === "gallery" ? 800 : 300
 
-  // Create a placeholder URL with the file name as text
-  const placeholderText = fileName.split(".")[0].replace(/-/g, "+")
-
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  return `/placeholder.svg?height=${height}&width=${width}&text=${placeholderText}`
+  // Return just the filename without the /uploads/ prefix
+  return `/${fileName}`
 }
 
 // Projects management
@@ -57,14 +47,24 @@ export async function uploadProjectImage(formData: FormData) {
   try {
     await connectToDatabase()
 
-    // Use our mock image upload function instead of Vercel Blob
-    const imageUrl = await mockImageUpload(image, "project")
-
-    // Find the project and add the image URL
+    // Find the project and check image count
     const project = await Project.findById(projectId)
     if (!project) {
       return { success: false, message: "Project not found" }
     }
+
+    // Check if project already has 3 images
+    if (project.images.length >= 3) {
+      return {
+        success: false,
+        message: "Maximum of 3 images allowed per project. Please delete an existing image first.",
+      }
+    }
+
+    // Use our mock image upload function instead of Vercel Blob
+    // For real uploads, we would use Vercel Blob or another storage service
+    // For now, we'll use the actual file name to make it more realistic
+    const imageUrl = await mockImageUpload(image, "project")
 
     project.images.push(imageUrl)
     project.updatedAt = new Date()

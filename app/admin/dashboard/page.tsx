@@ -52,6 +52,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
+// Add this import at the top
+import { AdminHelpDialog } from "@/components/admin-help-dialog"
+
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState<any[]>([])
@@ -646,8 +649,12 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
+        {/* Then update the header section in the return statement: */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+            <AdminHelpDialog />
+          </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleMigrateStaticData} disabled={isMigrating}>
               {isMigrating ? (

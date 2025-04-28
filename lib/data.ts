@@ -3,7 +3,8 @@ import { connectToDatabase, Project, News, Gallery } from "@/lib/mongodb"
 export async function getProjects() {
   try {
     await connectToDatabase()
-    const projects = await Project.find().sort({ updatedAt: -1 })
+    // Changed sorting to createdAt: 1 to show oldest projects first
+    const projects = await Project.find().sort({ createdAt: 1 })
     return JSON.parse(JSON.stringify(projects))
   } catch (error) {
     console.error("Error fetching projects:", error)

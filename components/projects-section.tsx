@@ -101,24 +101,30 @@ function ProjectCard({ project }: { project: Project }) {
   const [direction, setDirection] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
+  // Make sure we have valid images to display
+  const validImages =
+    project.images && project.images.length > 0
+      ? project.images
+      : [`/placeholder.svg?height=200&width=400&text=${encodeURIComponent(project.name)}`]
+
   const nextImage = useCallback(() => {
     setDirection(1)
-    setCurrentImage((prevImage) => (prevImage + 1) % project.images.length)
-  }, [project.images.length])
+    setCurrentImage((prevImage) => (prevImage + 1) % validImages.length)
+  }, [validImages.length])
 
   const prevImage = useCallback(() => {
     setDirection(-1)
-    setCurrentImage((prevImage) => (prevImage - 1 + project.images.length) % project.images.length)
-  }, [project.images.length])
+    setCurrentImage((prevImage) => (prevImage - 1 + validImages.length) % validImages.length)
+  }, [validImages.length])
 
   useEffect(() => {
-    if (!isHovered) {
+    if (!isHovered && validImages.length > 1) {
       const timer = setInterval(() => {
         nextImage()
       }, 5000)
       return () => clearInterval(timer)
     }
-  }, [nextImage, isHovered])
+  }, [nextImage, isHovered, validImages.length])
 
   const variants = {
     enter: (direction: number) => ({
@@ -160,8 +166,8 @@ function ProjectCard({ project }: { project: Project }) {
           >
             <Image
               src={
-                project.images[currentImage] ||
-                "/placeholder.svg?height=200&width=400&text=" + encodeURIComponent(project.name)
+                validImages[currentImage] ||
+                `/placeholder.svg?height=200&width=400&text=${encodeURIComponent(project.name)}`
               }
               alt={project.name}
               fill
