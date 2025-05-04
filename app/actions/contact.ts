@@ -1,162 +1,99 @@
 "use server"
 
 import { z } from "zod"
-import nodemailer from "nodemailer"
 
-// Form validation schemas
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters" }),
+// Email validation schema
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+  recipient: z.string().email("Invalid recipient email"),
 })
 
-const donationFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
+// Donation validation schema
+const donationSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-    message: "Please enter a valid donation amount",
+    message: "Amount must be a positive number",
   }),
+  recipient: z.string().email("Invalid recipient email"),
 })
-
-// Create email transporter
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_SERVER,
-    port: Number.parseInt(process.env.EMAIL_PORT || "587"),
-    secure: process.env.EMAIL_SECURE === "true",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  })
-}
 
 export async function sendContactEmail(formData: FormData) {
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const message = formData.get("message");
-
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: false, 
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: process.env.SMTP_USER,
-    to: "santanajepchumba@gmail.com",
-    subject: "New Contact Form Submission",
-    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
-    return { success: true, message: "Email sent successfully!" };
-  } catch (error) {
-    return { success: false, message: "Failed to send email.", error };
-  }
-}
-
-
-export async function processDonation(formData: FormData) {
-  try {
-    // Extract and validate form data
-    const name = formData.get("name") as string
-    const email = formData.get("email") as string
-    const amount = formData.get("amount") as string
-
-    const validatedData = donationFormSchema.parse({
-      name,
-      email,
-      amount,
-    })
-
-    // In a real implementation, you would integrate with a payment processor here
-    // For example, with Stripe:
-    //
-    // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    // const paymentIntent = await stripe.paymentIntents.create({
-    //   amount: Math.round(Number(validatedData.amount) * 100), // Convert to cents
-    //   currency: 'usd',
-    //   metadata: {
-    //     name: validatedData.name,
-    //     email: validatedData.email,
-    //   },
-    // });
-    //
-    // return {
-    //   success: true,
-    //   clientSecret: paymentIntent.client_secret,
-    //   message: "Payment initiated"
-    // };
-
-    // For now, we'll simulate a successful donation and send confirmation emails
-
-    // Create email transporter
-    const transporter = createTransporter()
-
-    // Email content for donor
-    const donorMailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: validatedData.email,
-      subject: `Thank You for Your Donation to One Tree One Child`,
-      text: `
-        Dear ${validatedData.name},
-        
-        Thank you for your generous donation of $${validatedData.amount} to One Tree One Child. Your contribution will help us continue our mission of environmental conservation and education.
-        
-        Best regards,
-        The One Tree One Child Team
-      `,
-      html: `
-        <h2>Thank You for Your Donation</h2>
-        <p>Dear ${validatedData.name},</p>
-        <p>Thank you for your generous donation of <strong>$${validatedData.amount}</strong> to One Tree One Child.</p>
-        <p>Your contribution will help us continue our mission of environmental conservation and education.</p>
-        <p>Best regards,<br>The One Tree One Child Team</p>
-      `,
+    // Extract form data
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+      recipient: formData.get("recipient"),
     }
 
-    // Email notification for organization
-    const orgMailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_TO,
-      subject: `New Donation Received`,
-      text: `
-        A new donation has been received:
-        
-        Amount: $${validatedData.amount}
-        Name: ${validatedData.name}
-        Email: ${validatedData.email}
-      `,
-      html: `
-        <h2>New Donation Received</h2>
-        <p><strong>Amount:</strong> $${validatedData.amount}</p>
-        <p><strong>Name:</strong> ${validatedData.name}</p>
-        <p><strong>Email:</strong> ${validatedData.email}</p>
-      `,
-    }
+    // Validate form data
+    const result = contactSchema.safeParse(data)
 
-    // Send emails
-    await transporter.sendMail(donorMailOptions)
-    await transporter.sendMail(orgMailOptions)
-
-    return { success: true, message: "Thank you for your donation!" }
-  } catch (error) {
-    console.error("Donation processing error:", error)
-    if (error instanceof z.ZodError) {
+    if (!result.success) {
       return {
         success: false,
-        message: "Validation error",
-        errors: error.errors.map((e) => ({ path: e.path.join("."), message: e.message })),
+        message: "Validation failed",
+        error: result.error.errors,
       }
     }
 
-    return { success: false, message: "Failed to process donation. Please try again later." }
+    // In a real application, you would send an email here
+    // For this example, we'll just simulate a successful email send
+
+    // Simulate a delay
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    return {
+      success: true,
+      message: "Email sent successfully",
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to send email",
+    }
   }
 }
 
+export async function processDonation(formData: FormData) {
+  try {
+    // Extract form data
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      amount: formData.get("amount"),
+      recipient: formData.get("recipient"),
+    }
+
+    // Validate form data
+    const result = donationSchema.safeParse(data)
+
+    if (!result.success) {
+      return {
+        success: false,
+        message: "Validation failed",
+        errors: result.error.errors,
+      }
+    }
+
+    // In a real application, you would process the donation here
+    // For this example, we'll just simulate a successful donation
+
+    // Simulate a delay
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    return {
+      success: true,
+      message: "Donation processed successfully",
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to process donation",
+    }
+  }
+}

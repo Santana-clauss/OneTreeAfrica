@@ -5,32 +5,38 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
+import { useState, useEffect } from "react"
 
-const newsItems = [
-  {
-    title: "Our founder Jeffrey K Kosgei talks about One Child One Tree Africa",
-    excerpt: "In a recent interview, our founder shares insights on the organization's mission and future plans.",
-    image: "/placeholder.svg?height=200&width=300&text=Interview",
-    link: "https://www.youtube.com/live/kVQ1v8kiHzM?si=5uYJ59AWSJxEe5Rd",
-    color: "bg-pink-500",
-  },
-  {
-    title: "Involve local communities in conservation",
-    excerpt: "Learn about our approach to community-driven conservation efforts across Kenya.",
-    image: "/placeholder.svg?height=200&width=300&text=Community",
-    link: "https://nation.africa/kenya/blogs-opinion/blogs/make-conservation-local-4412142",
-    color: "bg-cyan-500",
-  },
-  {
-    title: "Learn from Costa Rica's success story",
-    excerpt: "Discover how we're applying lessons from Costa Rica's environmental policies to our initiatives.",
-    image: "/placeholder.svg?height=200&width=300&text=Costa+Rica",
-    link: "https://nation.africa/kenya/blogs-opinion/blogs/learn-from-costa-rica-s-success-story-4263508",
-    color: "bg-amber-500",
-  },
-]
+// Define the NewsItem type
+interface NewsItem {
+  _id: string
+  title: string
+  excerpt: string
+  image: string
+  link: string
+  color: string
+}
 
 export function NewsSection() {
+  // We'll fetch news from the database
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([])
+
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const response = await fetch("/api/mongodb?collection=news")
+        const data = await response.json()
+        if (data.success) {
+          setNewsItems(data.data)
+        }
+      } catch (error) {
+        console.error("Error fetching news:", error)
+      }
+    }
+
+    fetchNews()
+  }, [])
+
   return (
     <section id="news" className="py-20 bg-gradient-to-b from-green-100 to-green-200">
       <div className="container mx-auto px-4">
@@ -49,7 +55,7 @@ export function NewsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item, index) => (
             <motion.div
-              key={index}
+              key={item._id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -92,4 +98,3 @@ export function NewsSection() {
     </section>
   )
 }
-

@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
@@ -14,15 +14,15 @@ const navItems = [
   { name: "About", href: "#about" },
   { name: "What We Do", href: "#what-we-do" },
   { name: "Projects", href: "#projects" },
-  // { name: "Team", href: "#team" },
   { name: "News", href: "#news" },
   { name: "Gallery", href: "/gallery" },
   { name: "Partners", href: "#partners" },
- // { name: "Contact", href: "#contact" },
+  { name: "Contact", href: "#contact" },
 ]
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
@@ -32,12 +32,13 @@ export function Header() {
     e.preventDefault()
 
     if (href === "/") {
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      window.location.href = "/"
       return
     }
 
-    if (href === "/gallery") {
-      window.location.href = href
+    if (pathname !== "/") {
+      // Navigate to the home page and scroll to the section
+      window.location.href = `/${href}`
       return
     }
 
@@ -68,7 +69,9 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className="text-sm font-medium hover:text-[#FF6B35] transition-colors duration-200"
-                onClick={(e) => scrollToSection(e, item.href)}
+                onClick={(e) => {
+                  if (item.href.startsWith("#")) scrollToSection(e, item.href)
+                }}
               >
                 {item.name}
               </Link>
@@ -97,7 +100,7 @@ export function Header() {
                       href={item.href}
                       className="text-sm font-medium hover:text-[#FF6B35] transition-colors duration-200"
                       onClick={(e) => {
-                        scrollToSection(e, item.href)
+                        if (item.href.startsWith("#")) scrollToSection(e, item.href)
                         const closeButton = document.querySelector(
                           'button[aria-label="Close"]',
                         ) as HTMLButtonElement | null

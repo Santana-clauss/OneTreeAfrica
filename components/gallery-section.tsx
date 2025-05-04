@@ -1,47 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
-const galleryImages = [
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Students+Planting+1",
-    alt: "Students planting trees at local school",
-    caption: "Students from St. Joseph Girls planting trees during our annual event",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Community+Project+1",
-    alt: "Community members participating in tree planting",
-    caption: "Local community members joining our reforestation efforts",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Environmental+Education+1",
-    alt: "Environmental education session",
-    caption: "Our team conducting an environmental education session at Moi Girls High School",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Tree+Nursery+1",
-    alt: "Tree nursery managed by women",
-    caption: "Women tending to our tree nursery, growing seedlings for future planting events",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Students+Planting+2",
-    alt: "Students planting trees in rural area",
-    caption: "Students from Kapkong High School participating in rural reforestation",
-  },
-  {
-    src: "/placeholder.svg?height=600&width=800&text=Eco+Club+Meeting",
-    alt: "Eco-club meeting at school",
-    caption: "An eco-club meeting at ACK Ziwa High School, discussing upcoming projects",
-  },
-]
+// Define the GalleryImage type
+interface GalleryImage {
+  _id: string
+  src: string
+  alt: string
+  caption: string
+}
 
 export function GallerySection() {
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
   const [currentImage, setCurrentImage] = useState<number | null>(null)
+
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        const response = await fetch("/api/mongodb?collection=gallery")
+        const data = await response.json()
+        if (data.success) {
+          setGalleryImages(data.data.slice(0, 6)) // Only show first 6 on homepage
+        }
+      } catch (error) {
+        console.error("Error fetching gallery:", error)
+      }
+    }
+
+    fetchGallery()
+  }, [])
 
   const openImage = (index: number) => setCurrentImage(index)
   const closeImage = () => setCurrentImage(null)
@@ -67,7 +60,7 @@ export function GallerySection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {galleryImages.map((image, index) => (
             <motion.div
-              key={index}
+              key={image._id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -88,6 +81,12 @@ export function GallerySection() {
               </Card>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Button asChild className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white">
+            <Link href="/gallery">View Full Gallery</Link>
+          </Button>
         </div>
 
         <AnimatePresence>
@@ -139,4 +138,3 @@ export function GallerySection() {
     </section>
   )
 }
-

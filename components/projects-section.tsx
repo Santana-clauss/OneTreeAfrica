@@ -7,121 +7,93 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, TreesIcon as Tree } from "lucide-react"
 
-const projects = [
-  {
-    name: "St Joseph Girls Chepterit",
-    trees: 2400,
-    images: [
-      "/public/chepterit.jpg?height=200&width=400&text=St+Joseph+Girls+1",
-      "/placeholder.svg?height=200&width=400&text=St+Joseph+Girls+2",
-      "/placeholder.svg?height=200&width=400&text=St+Joseph+Girls+3",
-    ],
-  },
-  {
-    name: "ACK Ziwa High School",
-    trees: 500,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=ACK+Ziwa+1",
-      "/placeholder.svg?height=200&width=400&text=ACK+Ziwa+2",
-      "/placeholder.svg?height=200&width=400&text=ACK+Ziwa+3",
-    ],
-  },
-  {
-    name: "Moi Girls High School",
-    trees: 1200,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Moi+Girls+1",
-      "/placeholder.svg?height=200&width=400&text=Moi+Girls+2",
-      "/placeholder.svg?height=200&width=400&text=Moi+Girls+3",
-    ],
-  },
-  {
-    name: "Kapkong High School",
-    trees: 1600,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Kapkong+1",
-      "/placeholder.svg?height=200&width=400&text=Kapkong+2",
-      "/placeholder.svg?height=200&width=400&text=Kapkong+3",
-    ],
-  },
-  {
-    name: "World Environmental Day - Landson Foundation",
-    trees: 400,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Landson+1",
-      "/placeholder.svg?height=200&width=400&text=Landson+2",
-      "/placeholder.svg?height=200&width=400&text=Landson+3",
-    ],
-  },
-  {
-    name: "Nelson Mandela Day - Moi University Primary School",
-    trees: 800,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Moi+University+1",
-      "/placeholder.svg?height=200&width=400&text=Moi+University+2",
-      "/placeholder.svg?height=200&width=400&text=Moi+University+3",
-    ],
-  },
-  {
-    name: "Eldoret National Polytechnic",
-    trees: 1000,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Eldoret+Poly+1",
-      "/placeholder.svg?height=200&width=400&text=Eldoret+Poly+2",
-      "/placeholder.svg?height=200&width=400&text=Eldoret+Poly+3",
-    ],
-  },
-  {
-    name: "Kapsabet Girls High School",
-    trees: 1800,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Kapsabet+Girls+1",
-      "/placeholder.svg?height=200&width=400&text=Kapsabet+Girls+2",
-      "/placeholder.svg?height=200&width=400&text=Kapsabet+Girls+3",
-    ],
-  },
-  {
-    name: "Kitale National Polytechnic",
-    trees: 700,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Kitale+Poly+1",
-      "/placeholder.svg?height=200&width=400&text=Kitale+Poly+2",
-      "/placeholder.svg?height=200&width=400&text=Kitale+Poly+3",
-    ],
-  },
-  {
-    name: "University of Eldoret",
-    trees: 2000,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=UoE+1",
-      "/placeholder.svg?height=200&width=400&text=UoE+2",
-      "/placeholder.svg?height=200&width=400&text=UoE+3",
-    ],
-  },
-  {
-    name: "Moi University Main Campus",
-    trees: 2500,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Moi+Uni+1",
-      "/placeholder.svg?height=200&width=400&text=Moi+Uni+2",
-      "/placeholder.svg?height=200&width=400&text=Moi+Uni+3",
-    ],
-  },
-  {
-    name: "Kesses Secondary School",
-    trees: 600,
-    images: [
-      "/placeholder.svg?height=200&width=400&text=Kesses+1",
-      "/placeholder.svg?height=200&width=400&text=Kesses+2",
-      "/placeholder.svg?height=200&width=400&text=Kesses+3",
-    ],
-  },
-]
-
+// Define the Project type
 interface Project {
-  name: string;
-  trees: number;
-  images: string[];
+  _id: string
+  name: string
+  trees: number
+  images: string[]
+}
+
+export function ProjectsSection() {
+  const [projects, setProjects] = useState<Project[]>([])
+  const [visibleProjects, setVisibleProjects] = useState(6)
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const response = await fetch("/api/projects")
+        const data = await response.json()
+        if (data.success) {
+          setProjects(data.projects)
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
+  const loadMore = () => {
+    setVisibleProjects((prev) => Math.min(prev + 6, projects.length))
+  }
+
+  return (
+    <section id="projects" className="py-20 bg-gradient-to-b from-green-50 to-green-100">
+      <div className="container mx-auto px-4">
+        <div className="max-w-2xl mx-auto text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-bold mb-4 text-gray-800"
+          >
+            Our Recent Projects
+          </motion.h2>
+          <p className="text-gray-600 text-lg">
+            Discover how we're making a difference in schools across Kenya through our tree planting initiatives
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence>
+            {projects.slice(0, visibleProjects).map((project, index) => (
+              <motion.div
+                key={project._id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {visibleProjects < projects.length && (
+          <motion.div
+            className="mt-12 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Button
+              onClick={loadMore}
+              className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white px-8 py-6 text-lg rounded-full transition-all duration-300 hover:shadow-lg"
+            >
+              Show More Projects
+            </Button>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+interface ProjectCardProps {
+  project: Project
 }
 
 function ProjectCard({ project }: { project: Project }) {
@@ -129,24 +101,30 @@ function ProjectCard({ project }: { project: Project }) {
   const [direction, setDirection] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
+  // Make sure we have valid images to display
+  const validImages =
+    project.images && project.images.length > 0
+      ? project.images
+      : [`/placeholder.svg?height=200&width=400&text=${encodeURIComponent(project.name)}`]
+
   const nextImage = useCallback(() => {
     setDirection(1)
-    setCurrentImage((prevImage) => (prevImage + 1) % project.images.length)
-  }, [project.images.length])
+    setCurrentImage((prevImage) => (prevImage + 1) % validImages.length)
+  }, [validImages.length])
 
   const prevImage = useCallback(() => {
     setDirection(-1)
-    setCurrentImage((prevImage) => (prevImage - 1 + project.images.length) % project.images.length)
-  }, [project.images.length])
+    setCurrentImage((prevImage) => (prevImage - 1 + validImages.length) % validImages.length)
+  }, [validImages.length])
 
   useEffect(() => {
-    if (!isHovered) {
+    if (!isHovered && validImages.length > 1) {
       const timer = setInterval(() => {
         nextImage()
       }, 5000)
       return () => clearInterval(timer)
     }
-  }, [nextImage, isHovered])
+  }, [nextImage, isHovered, validImages.length])
 
   const variants = {
     enter: (direction: number) => ({
@@ -187,7 +165,10 @@ function ProjectCard({ project }: { project: Project }) {
             className="absolute inset-0"
           >
             <Image
-              src={project.images[currentImage] || "/placeholder.svg"}
+              src={
+                validImages[currentImage] ||
+                `/placeholder.svg?height=200&width=400&text=${encodeURIComponent(project.name)}`
+              }
               alt={project.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -241,64 +222,3 @@ function ProjectCard({ project }: { project: Project }) {
     </Card>
   )
 }
-
-export function ProjectsSection() {
-  const [visibleProjects, setVisibleProjects] = useState(6)
-
-  const loadMore = () => {
-    setVisibleProjects((prev) => Math.min(prev + 6, projects.length))
-  }
-
-  return (
-    <section id="projects" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto text-center mb-12">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold mb-4 text-gray-800"
-          >
-            Our Recent Projects
-          </motion.h2>
-          <p className="text-gray-600 text-lg">
-            Discover how we're making a difference in schools across Kenya through our tree planting initiatives
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence>
-            {projects.slice(0, visibleProjects).map((project, index) => (
-              <motion.div
-                key={project.name}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        {visibleProjects < projects.length && (
-          <motion.div
-            className="mt-12 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Button
-              onClick={loadMore}
-              className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white px-8 py-6 text-lg rounded-full transition-all duration-300 hover:shadow-lg"
-            >
-              Show More Projects
-            </Button>
-          </motion.div>
-        )}
-      </div>
-    </section>
-  )
-}
-
