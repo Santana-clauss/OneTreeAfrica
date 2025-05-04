@@ -41,16 +41,13 @@ export async function POST(request: Request) {
     // In a real implementation, you would upload to Vercel Blob here
     // For now, we'll return a mock response with a placeholder URL
     const fileName = file.name.replace(/\s+/g, "-").toLowerCase()
-    const width = 800
-    const height = 600
-    const placeholderText = fileName.split(".")[0].replace(/-/g, "+")
-    const mockUrl = `/placeholder.svg?height=${height}&width=${width}&text=${placeholderText}`
-
+    const uploadPath = `/uploads/${fileName}`
+    
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     return NextResponse.json({
-      url: mockUrl,
+      url: uploadPath,
       pathname: filename,
       contentType: file.type,
       size: file.size,

@@ -842,7 +842,7 @@ export default function AdminDashboard() {
                             <div key={index} className="relative group">
                               <div className="aspect-video relative rounded-md overflow-hidden">
                                 <Image
-                                  src={image || "/placeholder.svg"}
+                                  src={image.startsWith("/") ? image : `/uploads/${image}`}
                                   alt={`Project image ${index + 1}`}
                                   fill
                                   className="object-cover"

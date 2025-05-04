@@ -7,11 +7,9 @@ import { revalidatePages } from "@/lib/actions/revalidate"
 
 // Helper function to simulate image upload and return a placeholder URL
 async function mockImageUpload(file: File, category: string) {
-  // Use the actual file name without the uploads prefix
-  const fileName = file.name.replace(/\s+/g, "-").toLowerCase()
-
-  // Return just the filename without the /uploads/ prefix
-  return `/${fileName}`
+  const fileName = file.name.replace(/\s+/g, "-").toLowerCase();
+  // Return the correct path for uploaded images
+  return `/uploads/${fileName}`;
 }
 
 // Projects management
@@ -23,7 +21,7 @@ export async function getProjects() {
 
   try {
     await connectToDatabase()
-    const projects = await Project.find().sort({ updatedAt: -1 })
+    const projects = await Project.find().sort({ updatedAt: -1 }).lean(); // Use .lean() to return plain objects
     return projects
   } catch (error) {
     console.error("Error fetching projects:", error)
@@ -220,7 +218,7 @@ export async function getNewsItems() {
 
   try {
     await connectToDatabase()
-    const newsItems = await News.find().sort({ createdAt: -1 })
+    const newsItems = await News.find().sort({ createdAt: -1 }).lean(); // Use .lean() to return plain objects
     return newsItems
   } catch (error) {
     console.error("Error fetching news items:", error)
@@ -356,7 +354,7 @@ export async function getGalleryImages() {
 
   try {
     await connectToDatabase()
-    const galleryImages = await Gallery.find().sort({ createdAt: -1 })
+    const galleryImages = await Gallery.find().sort({ createdAt: -1 }).lean(); // Use .lean() to return plain objects
     return galleryImages
   } catch (error) {
     console.error("Error fetching gallery images:", error)

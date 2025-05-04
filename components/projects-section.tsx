@@ -104,7 +104,7 @@ function ProjectCard({ project }: { project: Project }) {
   // Make sure we have valid images to display
   const validImages =
     project.images && project.images.length > 0
-      ? project.images
+      ? project.images.map((img) => img.startsWith("/") ? img : `/uploads/${img}`)
       : [`/placeholder.svg?height=200&width=400&text=${encodeURIComponent(project.name)}`]
 
   const nextImage = useCallback(() => {
