@@ -3,18 +3,19 @@ import { Facebook, Instagram, Twitter } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-6">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div>
-            <h3 className="text-white font-bold text-lg mb-2">One Child One Tree</h3>
-            <p className="text-sm">
-              Creating a platform for the next generation to take climate action through education, conservation, and tree planting.
+    <footer className="bg-gray-900 text-gray-300">
+      <div className="container mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+        <h3 className="text-white font-bold text-lg mb-4">One Child One Tree</h3>
+        <p className="text-sm">
+          Creating a platform for the next generation to take climate action through education, conservation,
+              tree planting.
             </p>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-2">Quick Links</h4>
-            <ul className="space-y-1">
+            <h4 className="text-white font-bold mb-4">Quick Links</h4>
+            <ul className="space-y-2">
               <li>
                 <Link href="#about" className="text-sm hover:text-[#FF6B35]">
                   About Us
@@ -38,8 +39,8 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-2">Contact Info</h4>
-            <ul className="space-y-1 text-sm">
+            <h4 className="text-white font-bold mb-4">Contact Info</h4>
+            <ul className="space-y-2 text-sm">
               <li>P.O Box 937-30100</li>
               <li>Eldoret, Kenya</li>
               <li>info@onechildonetree.africa</li>
@@ -47,8 +48,8 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-2">Follow Us</h4>
-            <div className="flex gap-3">
+            <h4 className="text-white font-bold mb-4">Follow Us</h4>
+            <div className="flex gap-4">
               <a
                 href="https://twitter.com/onechildonetree"
                 target="_blank"
@@ -76,7 +77,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-6 pt-4 text-center text-sm">
+        <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
           <p>&copy; {new Date().getFullYear()} One Child One Tree Africa. All rights reserved.</p>
         </div>
       </div>
