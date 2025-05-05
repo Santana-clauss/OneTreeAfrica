@@ -55,6 +55,14 @@ import {
 // Add this import at the top
 import { AdminHelpDialog } from "@/components/admin-help-dialog"
 
+// Add this helper function near the top of the component
+const getImagePath = (imagePath: string) => {
+  if (!imagePath) return "/placeholder.svg"
+  if (imagePath.startsWith("http")) return imagePath
+  if (imagePath.startsWith("/")) return imagePath
+  return `/uploads/${imagePath}`
+}
+
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState<any[]>([])
@@ -842,7 +850,7 @@ export default function AdminDashboard() {
                             <div key={index} className="relative group">
                               <div className="aspect-video relative rounded-md overflow-hidden">
                                 <Image
-                                  src={image.startsWith("/") ? image : `/uploads/${image}`}
+                                  src={getImagePath(image) || "/placeholder.svg"}
                                   alt={`Project image ${index + 1}`}
                                   fill
                                   className="object-cover"
@@ -959,7 +967,7 @@ export default function AdminDashboard() {
                         <Label htmlFor="edit-news-image">Image (leave empty to keep current image)</Label>
                         <div className="mb-2">
                           <Image
-                            src={selectedNewsItem.image || "/placeholder.svg"}
+                            src={getImagePath(selectedNewsItem.image) || "/placeholder.svg"}
                             alt={selectedNewsItem.title}
                             width={200}
                             height={100}
@@ -1002,7 +1010,7 @@ export default function AdminDashboard() {
                         <div className="flex flex-col sm:flex-row">
                           <div className="relative w-full sm:w-1/3 h-48 sm:h-auto">
                             <Image
-                              src={item.image || "/placeholder.svg"}
+                              src={getImagePath(item.image) || "/placeholder.svg"}
                               alt={item.title}
                               fill
                               className="object-cover"
@@ -1112,7 +1120,7 @@ export default function AdminDashboard() {
                         <Label htmlFor="edit-gallery-image">Image (leave empty to keep current image)</Label>
                         <div className="mb-2">
                           <Image
-                            src={selectedGalleryImage.src || "/placeholder.svg"}
+                            src={getImagePath(selectedGalleryImage.src) || "/placeholder.svg"}
                             alt={selectedGalleryImage.alt}
                             width={200}
                             height={200}
@@ -1144,7 +1152,12 @@ export default function AdminDashboard() {
                     {galleryImages.map((image) => (
                       <div key={image._id} className="relative group">
                         <div className="aspect-square relative rounded-md overflow-hidden">
-                          <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+                          <Image
+                            src={getImagePath(image.src) || "/placeholder.svg"}
+                            alt={image.alt}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-end">
                           <div className="p-3 w-full bg-black bg-opacity-50 text-white">
