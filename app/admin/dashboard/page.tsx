@@ -57,10 +57,9 @@ import { AdminHelpDialog } from "@/components/admin-help-dialog"
 
 // Add this helper function near the top of the component
 const getImagePath = (imagePath: string) => {
-  if (!imagePath) return "/placeholder.svg"
-  if (imagePath.startsWith("http")) return imagePath
-  if (imagePath.startsWith("/")) return imagePath
-  return `/uploads/${imagePath}`
+  if (!imagePath) return "/placeholder.svg";
+  if (imagePath.startsWith("http") || imagePath.startsWith("/")) return imagePath; // External or relative paths
+  return imagePath; // Default to the raw URL or filename
 }
 
 export default function AdminDashboard() {
