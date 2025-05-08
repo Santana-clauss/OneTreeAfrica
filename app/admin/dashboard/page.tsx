@@ -55,12 +55,20 @@ import {
 // Add this import at the top
 import { AdminHelpDialog } from "@/components/admin-help-dialog"
 
-// Add this helper function near the top of the component
+// Update the getImagePath helper function
 const getImagePath = (imagePath: string) => {
   if (!imagePath) return "/placeholder.svg";
-  if (imagePath.startsWith("http") || imagePath.startsWith("/")) return imagePath; // External or relative paths
-  return imagePath; // Default to the raw URL or filename
-}
+  if (imagePath.startsWith('/uploads/')) {
+    // For local uploads, ensure the path is correct
+    return imagePath;
+  }
+  if (imagePath.startsWith('http')) {
+    // For external URLs
+    return imagePath;
+  }
+  // For other paths (like static images)
+  return `/${imagePath.replace(/^\//, '')}`;
+};
 
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)

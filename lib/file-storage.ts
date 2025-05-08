@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { mkdir, writeFile } from "fs/promises"
+import sharp from 'sharp'
 
 // Base directory for file storage
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads")
@@ -20,13 +21,14 @@ export async function ensureUploadDir() {
 export async function saveFile(file: Buffer, filename: string): Promise<string> {
   await ensureUploadDir()
 
-  // Create a unique filename to avoid collisions
-  const uniqueFilename = `${Date.now()}-${filename.replace(/\s+/g, "-").toLowerCase()}`
+  // Create a unique filename with original extension
+  const ext = filename.split('.').pop()
+  const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`
   const filePath = path.join(UPLOAD_DIR, uniqueFilename)
 
   try {
     await writeFile(filePath, file)
-    // Return the URL path that will be accessible from the web
+    // Return the public URL path that will work with Next.js Image component
     return `/uploads/${uniqueFilename}`
   } catch (error) {
     console.error("Error saving file:", error)

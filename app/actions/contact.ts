@@ -1,6 +1,7 @@
 "use server"
 
 import { z } from "zod"
+import nodemailer from "nodemailer"
 
 // Email validation schema
 const contactSchema = z.object({
@@ -20,9 +21,19 @@ const donationSchema = z.object({
   recipient: z.string().email("Invalid recipient email"),
 })
 
+// Create email transporter from env variables
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: Number(process.env.EMAIL_PORT),
+  secure: true, // true for 465, false for 587
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+})
+
 export async function sendContactEmail(formData: FormData) {
   try {
-    // Extract form data
     const data = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -30,7 +41,6 @@ export async function sendContactEmail(formData: FormData) {
       recipient: formData.get("recipient"),
     }
 
-    // Validate form data
     const result = contactSchema.safeParse(data)
 
     if (!result.success) {
@@ -41,27 +51,36 @@ export async function sendContactEmail(formData: FormData) {
       }
     }
 
-    // In a real application, you would send an email here
-    // For this example, we'll just simulate a successful email send
-
-    // Simulate a delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await transporter.sendMail({
+      from: `"One Child One Tree Contact" <${process.env.EMAIL_USER}>`,
+      to: String(data.recipient),
+      replyTo: String(data.email),
+      subject: `New Contact Form Message from ${data.name}`,
+      text: `Name: ${data.name}\nEmail: ${data.email}\nMessage: ${data.message}`,
+      html: `
+        <h2>New Contact Form Message</h2>
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${String(data.message).replace(/\n/g, '<br>')}</p>
+      `,
+    })
 
     return {
       success: true,
       message: "Email sent successfully",
     }
   } catch (error) {
+    console.error("Email error:", error)
     return {
       success: false,
-      message: "Failed to send email",
+      message: "Failed to send email. Please try again later.",
     }
   }
 }
 
 export async function processDonation(formData: FormData) {
   try {
-    // Extract form data
     const data = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -69,7 +88,6 @@ export async function processDonation(formData: FormData) {
       recipient: formData.get("recipient"),
     }
 
-    // Validate form data
     const result = donationSchema.safeParse(data)
 
     if (!result.success) {
@@ -80,10 +98,7 @@ export async function processDonation(formData: FormData) {
       }
     }
 
-    // In a real application, you would process the donation here
-    // For this example, we'll just simulate a successful donation
-
-    // Simulate a delay
+    // Simulate donation handling
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     return {

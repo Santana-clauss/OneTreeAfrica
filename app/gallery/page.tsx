@@ -17,6 +17,18 @@ interface GalleryImage {
   caption: string
 }
 
+// Add this helper function at the top of your component
+const getImagePath = (imagePath: string) => {
+  if (!imagePath) return "/placeholder.svg";
+  if (imagePath.startsWith('/uploads/')) {
+    return imagePath;
+  }
+  if (imagePath.startsWith('http')) {
+    return imagePath;
+  }
+  return `/${imagePath.replace(/^\//, '')}`;
+};
+
 export default function GalleryPage() {
   const [currentImage, setCurrentImage] = useState<number | null>(null)
   const [filter, setFilter] = useState("all")
@@ -103,10 +115,14 @@ export default function GalleryPage() {
                     >
                       <div className="relative h-64">
                         <Image
-                          src={image.src || "/placeholder.svg"}
+                          src={getImagePath(image.src)}
                           alt={image.alt}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRseHyAiJRwlKigpJSw4Ly0sM0Q6NT5EOS89RFZIQD9cYVtSVjk8TWBEYYNwc3n/2wBDARUXFyAeIBohHiAhITFCLzEvQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUH/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300" />
                       </div>
@@ -132,11 +148,13 @@ export default function GalleryPage() {
               <div className="relative max-w-5xl w-full">
                 <div className="relative">
                   <Image
-                    src={galleryImages[currentImage].src || "/placeholder.svg"}
+                    src={getImagePath(galleryImages[currentImage].src)}
                     alt={galleryImages[currentImage].alt}
                     width={1200}
                     height={800}
                     className="w-full h-auto rounded-lg"
+                    priority={true}
+                    quality={85}
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-4 rounded-b-lg">
                     <p className="text-white text-center">{galleryImages[currentImage].caption}</p>
