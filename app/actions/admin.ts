@@ -4,12 +4,16 @@ import { revalidatePath } from "next/cache"
 import { checkAuth } from "./auth"
 import { connectToDatabase, Project, News, Gallery } from "@/lib/mongodb"
 import { revalidatePages } from "@/lib/actions/revalidate"
+import { saveFile } from "@/lib/file-storage"
 
-// Helper function to simulate image upload and return a placeholder URL
-async function mockImageUpload(file: File, category: string) {
-  const fileName = file.name.replace(/\s+/g, "-").toLowerCase();
-  // Return the correct path for uploaded images
-  return `/uploads/${fileName}`;
+// Helper function to handle image upload and return the URL
+async function handleImageUpload(file: File): Promise<string> {
+  const bytes = await file.arrayBuffer()
+  const buffer = Buffer.from(bytes)
+  
+  // Save the file and get the URL path
+  const url = await saveFile(buffer, file.name)
+  return url
 }
 
 // Projects management
@@ -59,10 +63,8 @@ export async function uploadProjectImage(formData: FormData) {
       }
     }
 
-    // Use our mock image upload function instead of Vercel Blob
-    // For real uploads, we would use Vercel Blob or another storage service
-    // For now, we'll use the actual file name to make it more realistic
-    const imageUrl = await mockImageUpload(image, "project")
+    // Use handleImageUpload function instead of mockImageUpload
+    const imageUrl = await handleImageUpload(image)
 
     project.images.push(imageUrl)
     project.updatedAt = new Date()
@@ -245,8 +247,8 @@ export async function addNewsItem(formData: FormData) {
   try {
     await connectToDatabase()
 
-    // Use our mock image upload function instead of Vercel Blob
-    const imageUrl = await mockImageUpload(image, "news")
+    // Use handleImageUpload function instead of mockImageUpload
+    const imageUrl = await handleImageUpload(image)
 
     // Add the news item
     const newItem = new News({
@@ -305,7 +307,7 @@ export async function updateNewsItem(formData: FormData) {
 
     // Update image if provided
     if (image && image.size > 0) {
-      const imageUrl = await mockImageUpload(image, "news")
+      const imageUrl = await handleImageUpload(image)
       newsItem.image = imageUrl
     }
 
@@ -379,8 +381,8 @@ export async function uploadGalleryImage(formData: FormData) {
   try {
     await connectToDatabase()
 
-    // Use our mock image upload function instead of Vercel Blob
-    const imageUrl = await mockImageUpload(image, "gallery")
+    // Use handleImageUpload function instead of mockImageUpload
+    const imageUrl = await handleImageUpload(image)
 
     // Add the gallery image
     const newImage = new Gallery({
@@ -431,7 +433,7 @@ export async function updateGalleryImage(formData: FormData) {
 
     // Update image if provided
     if (image && image.size > 0) {
-      const imageUrl = await mockImageUpload(image, "gallery")
+      const imageUrl = await handleImageUpload(image)
       galleryImage.src = imageUrl
     }
 

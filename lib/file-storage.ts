@@ -26,7 +26,8 @@ export async function saveFile(file: Buffer, filename: string): Promise<string> 
 
   try {
     await writeFile(filePath, file)
-    return `${uniqueFilename}`
+    // Return the URL path that will be accessible from the web
+    return `/uploads/${uniqueFilename}`
   } catch (error) {
     console.error("Error saving file:", error)
     throw new Error("Failed to save file")
